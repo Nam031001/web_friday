@@ -1,0 +1,82 @@
+@use 'sass:map';
+@use 'sass:list';
+@import 'https://fonts.googleapis.com/css2?family=Spline+Sans+Mono:wght@300..700&display=swap';
+@import 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400..900&display=swap';
+
+$color-blue: #5ea3ec;
+$color-red: #f64444;
+$color-yellow: #ffb400;
+$color-white: #fff;
+$color-black: #000;
+$column-close-w: 3.75rem;
+$column-num: 4;
+$grid-duration: 300ms;
+$sticky-on-duration: 150ms;
+$sticky-off-duration: 300ms;
+$content-on-duration: 250ms;
+$content-off-duration: 150ms;
+$grid-delay: max($content-off-duration, $sticky-on-duration) + 300ms;
+$sticky-off-delay: $content-off-duration + $grid-duration + 300ms;
+$content-on-delay: $grid-duration + $grid-delay;
+$font-sans: ('Spline Sans Mono', monospace);
+$font-serif: ('Playfair Display', serif);
+$sticky-1-p-x: 3.75rem;
+$sticky-p-x: 0.3125rem;
+$sticky-p-y: 3.75rem;
+$section-p: 3.75rem;
+$section-gap: 3.75rem;
+
+#grid {
+  display: grid;
+  grid-template-rows: 100vh auto;
+
+  // 한칸을 100vh, 나머지 한 칸은 auto로 나머지 공간을 꽉 채워라
+
+  // grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  // scss에서도 for 구문이 가능하다. 창이 열렸을 때 ㅊㅇ 모든 경우의 수
+  @for $a from 1 through $column-num {
+    &[data-selected-nth='#{$a}'] {
+      $val: ();
+
+      @for $b from 1 through $column-num {
+        @if $a == $b {
+          $val: list.append(
+            $val,
+            calc(100% - ($column-num - 1) * $column-close-w)
+          );
+        } @else {
+          $val: list.append($val, $column-close-w);
+        }
+      }
+
+      grid-template-columns: $val;
+    }
+  }
+
+  // &[data-selected-nth='1'] {
+  // }
+}
+
+.column {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: 1 / -1;
+
+  // 세로로 한줄을 꽉 채움
+  &:nth-of-type(1) {
+    background-color: $color-white;
+  }
+
+  &:nth-of-type(2) {
+    background-color: $color-blue;
+  }
+
+  &:nth-of-type(3) {
+    background-color: $color-red;
+  }
+
+  &:nth-of-type(4) {
+    background-color: $color-yellow;
+  }
+}
